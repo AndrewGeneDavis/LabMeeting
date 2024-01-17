@@ -2,7 +2,8 @@
 # Andrew Davis
 # 01/16/2024
 
-presenterList = c("Jessica Proulx",
+lastPresenter <- "Michael Alcaraz"
+presenterList <- c("Jessica Proulx",
                   "Anais Equey",
                   "Brightany Li",
                   "Marcos Garcia Teneche",
@@ -41,3 +42,16 @@ for(i in 1:7){
     break
   }
 }
+
+nextLabMeeting <- as.Date(as.character(nextLabMeeting), format = '%Y-%m-%d')
+
+lastPresenterIndex <- which(presenterList == lastPresenter)
+presenterOrder <- c(presenterList[lastPresenterIndex:length(presenterList)], presenterList[1:lastPresenterIndex-1])
+
+dateList <- c()
+for(i in 0:(length(presenterList)-1)){
+  dateList <- c(dateList, nextLabMeeting + (7*i))
+}
+dateList <- as.Date(dateList)
+
+print(data.frame(presenterOrder, dateList))
