@@ -2,14 +2,15 @@
 # Andrew Davis
 # 01/16/2024
 
-lastPresenter <- "Michael Alcaraz"
+lastPresenter <- "Jessica Proulx"
 presenterList <- c("Jessica Proulx",
-                  "Anais Equey",
                   "Brightany Li",
                   "Marcos Garcia Teneche",
                   "Lana Zaretski",
+                  "Carolina Cano Macip",
                   "Xue Lei",
                   "Zong Chua",
+                  "Anais Equey",
                   "Theophilos Tzaridis",
                   "Sha Li",
                   "Armin Gandhi",
@@ -26,12 +27,15 @@ presenterList <- c("Jessica Proulx",
                   "Andrew Davis",
                   "Michael Alcaraz")
 
+length(presenterList)
+
 # Generate list of Labmeeting Dates
 
 labmeetingday <- "Friday"
 weekdayToday <- weekdays(Sys.time())
 nextLabMeeting <- Sys.time()
 
+# Find next labmeeting date by using today and the day of the week from above
 for(i in 1:7){
   if(weekdays(nextLabMeeting) == labmeetingday){
     break
@@ -42,16 +46,27 @@ for(i in 1:7){
     break
   }
 }
-
 nextLabMeeting <- as.Date(as.character(nextLabMeeting), format = '%Y-%m-%d')
 
-lastPresenterIndex <- which(presenterList == lastPresenter)
-presenterOrder <- c(presenterList[lastPresenterIndex:length(presenterList)], presenterList[1:lastPresenterIndex-1])
-
-dateList <- c()
-for(i in 0:(length(presenterList)-1)){
-  dateList <- c(dateList, nextLabMeeting + (7*i))
-}
-dateList <- as.Date(dateList)
-
-print(data.frame(presenterOrder, dateList))
+# Restructure presenter order to start after the last presenter
+tryCatch(
+  {
+  lastPresenterIndex <- which(presenterList == lastPresenter)
+  if(lastPresenterIndex == length(presenterList)){
+    presenterOrder <- presenterList
+  }else{
+    presenterOrder <- c(presenterList[(lastPresenterIndex+1):length(presenterList)], presenterList[1:lastPresenterIndex])
+  }
+  
+  dateList <- c()
+  for(i in 0:(length(presenterList)-1)){
+    dateList <- c(dateList, nextLabMeeting + (7*i))
+  }
+  dateList <- as.Date(dateList)
+  
+  outputFrame <- data.frame(presenterOrder, dateList)
+  print(outputFrame)
+  }
+)
+print(getwd())
+write.csv(file = "./Labmeeting_Order.csv", x = outputFrame)
